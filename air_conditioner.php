@@ -20,13 +20,13 @@ class Controller
 	public function downHandler()
 	{
 		$this->temperature_manager->down();
-		$user_interface->print_setting_temperature();
+		$user_interface->print_setting_temperature($this->temperature_manager->now_setting_temperature());
 	}
 
 	public function upHandler()
 	{
 		$this->temperature_manager->up();
-		$user_interface->print_setting_temperature();
+		$user_interface->print_setting_temperature($this->temperature_manager->now_setting_temperature());
 	}
 
 }
@@ -56,6 +56,11 @@ class TemperatureManager
 	public function up()
 	{
 		$this->setting_temperature -= 1;
+	}
+
+	public function now_setting_temperature()
+	{
+		return $this->setting_temperature;
 	}
 }
 
