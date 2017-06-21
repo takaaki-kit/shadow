@@ -19,13 +19,13 @@ class Controller
 
 	public function downHandler()
 	{
-		$this->temperature_manager->down() -= 1;
+		$this->temperature_manager->down();
 		$user_interface->print_setting_temperature();
 	}
 
 	public function upHandler()
 	{
-		$this->temperature_manager->up() += 1;
+		$this->temperature_manager->up();
 		$user_interface->print_setting_temperature();
 	}
 
@@ -46,6 +46,16 @@ class TemperatureManager
 		if ( $this->temperature_sensor->value() < $this->setting_temperature ) { $this->air_conditioner->heat(); }
 		else if ( $this->temperature_sensor->value() > $this->setting_temperature ) { $this->air_conditioner->cool(); }
 		else{ $this->air_conditioner->stop(); }
+	}
+
+	public function up()
+	{
+		$this->setting_temperature += 1;
+	}
+
+	public function up()
+	{
+		$this->setting_temperature -= 1;
 	}
 }
 
