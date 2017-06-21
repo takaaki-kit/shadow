@@ -2,17 +2,16 @@
 
 class Controller
 {
-	public function __construct($user_interface, $power_manager, $temperature_manager)
+	public function __construct($user_interface, $temperature_manager)
 	{
 		$this->user_interface = $user_interface;
-		$this->power_manager = $power_manager;
 		$this->temperature_manager = $temperature_manager;
 	}
 
 	public function polling()
 	{
-		while( $this->power_manager->is_running() ) {
-			$this->temperature_manager->print_now_temperature();
+		while( PowerManager::is_running() ) {
+			$this->user_interface->print_now_temperature($this->temperature_manager->now_temperature());
 			$temperature_manager->execute();
 		}
 	}
@@ -43,8 +42,8 @@ class TemperatureManager
 
 	public function execute()
 	{
-		if ( $this->temperature_sensor->value() < $this->setting_temperature ) { $this->air_conditioner->heat(); }
-		else if ( $this->temperature_sensor->value() > $this->setting_temperature ) { $this->air_conditioner->cool(); }
+		if ( $this->now_setting_temperature() < $this->setting_temperature ) { $this->air_conditioner->heat(); }
+		else if ( $this->now_setting_temperature() > $this->setting_temperature ) { $this->air_conditioner->cool(); }
 		else{ $this->air_conditioner->stop(); }
 	}
 
@@ -62,6 +61,11 @@ class TemperatureManager
 	{
 		return $this->setting_temperature;
 	}
+
+	public function now_setting_temperature()
+	{
+		return $this->temperature_sensor->value();
+	}
 }
 
 class Airconditioner
@@ -70,4 +74,19 @@ class Airconditioner
 
 class UserInterface
 {
+}
+
+class TemperatureSensor
+{
+}
+
+class PowerManager
+{
+	public function on()
+	{
+		$controller = new Controller($user_interface, $temperature_manager);
+		$controller->polling();
+	}
+
+	public function is_running() {}
 }
