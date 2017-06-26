@@ -35,6 +35,11 @@ class TempoController
 {
 	private $tempo = DEFAULT_TEMPO;
 
+	public function __construct($sound)
+	{
+		$this->sound = $sound;
+	}
+
 	public function sound()
 	{
 		//現在のテンポに合わせて
@@ -54,6 +59,11 @@ class TempoController
 	public function now_tempo()
 	{
 		return $this->tempo;
+	}
+
+	public function select_sound()
+	{
+		$this->sound = $this->sound->next();
 	}
 }
 
@@ -75,9 +85,27 @@ class UserInterface
 	}
 
 	public function display_tempo($tempo) {}
+	public function select_sound()
+	{
+		$this->metronome->select_sound();
+	}
 }
 
 class PowerManager
 {
 	public static function is_running() {}
+}
+
+class Sound
+{
+	private $type;
+
+	public function __construct()
+	{
+		$this->type = DEFAULT_SOUND_TYPE;
+	}
+
+	public function next()
+	{
+	}
 }
